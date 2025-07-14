@@ -14,6 +14,7 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My requests'),
+        centerTitle: true,
       ),
       drawer: const DrawerItem(),
       body: ListView.builder(
