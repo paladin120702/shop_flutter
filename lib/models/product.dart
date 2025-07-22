@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class Product with ChangeNotifier {
   final String id;
@@ -20,5 +22,10 @@ class Product with ChangeNotifier {
   void toggleFavorite() {
     isFavorite = !isFavorite;
     notifyListeners();
+    patch(
+      Uri.parse(
+          'https://shop-bd047-default-rtdb.firebaseio.com/products/$id.json'),
+      body: jsonEncode({"isFavorite": isFavorite}),
+    );
   }
 }

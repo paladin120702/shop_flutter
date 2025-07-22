@@ -12,6 +12,7 @@ class OrderWidget extends StatefulWidget {
 
 class _OrderWidgetState extends State<OrderWidget> {
   bool _expanded = false;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,11 +42,14 @@ class _OrderWidgetState extends State<OrderWidget> {
               child: ListView(
                 children: widget.order.products.map(
                   (product) {
+                    String productName = (product.name.length > 25
+                        ? '${product.name.substring(0, 25)}...'
+                        : product.name);
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          product.name,
+                          productName,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
