@@ -7,7 +7,12 @@ import 'package:shop/models/order.dart';
 
 class OrderList with ChangeNotifier {
   final _baseUrl = 'https://shop-bd047-default-rtdb.firebaseio.com/orders';
-  final List<Order> _items = [];
+  final String _token;
+  final String _uId;
+  List<Order> _items = [];
+
+  OrderList([this._token = '', this._uId = '', this._items = const []]);
+
   List<Order> get items {
     return [..._items];
   }
@@ -17,14 +22,14 @@ class OrderList with ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    _items.clear();
+    List<Order> items = [];
     final response = await get(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('$_baseUrl/$_uId.json?auth=$_token'),
     );
     if (response.body == 'null') return;
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((orderId, orderData) {
-      _items.add(
+      items.add(
         Order(
           id: orderId,
           date: DateTime.parse(orderData['date']),
@@ -41,13 +46,14 @@ class OrderList with ChangeNotifier {
         ),
       );
     });
+    _items = items.reversed.toList();
     notifyListeners();
   }
 
   Future<void> addOrder(Cart cart) async {
     final date = DateTime.now();
     final response = await post(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('$_baseUrl/$_uId.json?auth=$_token'),
       body: jsonEncode(
         {
           "total": cart.totalAmount,

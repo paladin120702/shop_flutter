@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shop/components/cart_button.dart';
 import 'package:shop/components/cart_widget.dart';
 import 'package:shop/models/cart.dart';
-import 'package:shop/models/order_list.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});

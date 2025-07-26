@@ -19,13 +19,13 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  void toggleFavorite() {
+  void toggleFavorite(String token, uId) {
     isFavorite = !isFavorite;
     notifyListeners();
-    patch(
+    put(
       Uri.parse(
-          'https://shop-bd047-default-rtdb.firebaseio.com/products/$id.json'),
-      body: jsonEncode({"isFavorite": isFavorite}),
+          'https://shop-bd047-default-rtdb.firebaseio.com/favorites/$uId/$id.json?auth=$token'),
+      body: jsonEncode(isFavorite),
     );
   }
 }
