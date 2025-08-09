@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shop/data/storage.dart';
 import 'package:shop/models/auth_exception.dart';
+import 'package:shop/utils/data_urls.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -32,7 +33,7 @@ class Auth with ChangeNotifier {
   Future<void> _authenticate(
       String email, String password, String urlFragment) async {
     final url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:$urlFragment?key=AIzaSyDWK5WxltkV3TgCSKRk0CIdM3YERI5qvEg';
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlFragment?key=${DataUrls.AUTHENTICATE_URL}';
     final response = await post(
       Uri.parse(url),
       body: jsonEncode(

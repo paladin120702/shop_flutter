@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
+import 'package:shop/utils/data_urls.dart';
+
 class Product with ChangeNotifier {
   final String id;
   final String name;
@@ -24,7 +26,7 @@ class Product with ChangeNotifier {
     notifyListeners();
     put(
       Uri.parse(
-          'https://shop-bd047-default-rtdb.firebaseio.com/favorites/$uId/$id.json?auth=$token'),
+          '${DataUrls.DATABASE_USER_FAVORITES_URL}/$uId/$id.json?auth=$token'),
       body: jsonEncode(isFavorite),
     );
   }

@@ -4,9 +4,9 @@ import 'package:http/http.dart';
 import 'package:shop/models/cart.dart';
 import 'package:shop/models/cart_item.dart';
 import 'package:shop/models/order.dart';
+import 'package:shop/utils/data_urls.dart';
 
 class OrderList with ChangeNotifier {
-  final _baseUrl = 'https://shop-bd047-default-rtdb.firebaseio.com/orders';
   final String _token;
   final String _uId;
   List<Order> _items = [];
@@ -24,7 +24,7 @@ class OrderList with ChangeNotifier {
   Future<void> loadOrders() async {
     List<Order> items = [];
     final response = await get(
-      Uri.parse('$_baseUrl/$_uId.json?auth=$_token'),
+      Uri.parse('${DataUrls.DATABASE_ORDERS_URL}/$_uId.json?auth=$_token'),
     );
     if (response.body == 'null') return;
     Map<String, dynamic> data = jsonDecode(response.body);
@@ -53,7 +53,7 @@ class OrderList with ChangeNotifier {
   Future<void> addOrder(Cart cart) async {
     final date = DateTime.now();
     final response = await post(
-      Uri.parse('$_baseUrl/$_uId.json?auth=$_token'),
+      Uri.parse('${DataUrls.DATABASE_ORDERS_URL}/$_uId.json?auth=$_token'),
       body: jsonEncode(
         {
           "total": cart.totalAmount,

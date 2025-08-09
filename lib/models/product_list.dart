@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/utils/data_urls.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-bd047-default-rtdb.firebaseio.com/products';
   List<Product> _items = [];
   final String _token;
   final String _uId;
@@ -24,13 +24,13 @@ class ProductList with ChangeNotifier {
   Future<void> loadProducts() async {
     _items.clear();
     final response = await get(
-      Uri.parse('$_baseUrl.json?auth=$_token'),
+      Uri.parse('${DataUrls.DATABASE_PRODUCTS_URL}.json?auth=$_token'),
     );
     if (response.body == 'null') return;
 
     final favoriteResponse = await get(
       Uri.parse(
-          'https://shop-bd047-default-rtdb.firebaseio.com/favorites/$_uId.json?auth=$_token'),
+          '${DataUrls.DATABASE_USER_FAVORITES_URL}/$_uId.json?auth=$_token'),
     );
 
     Map<String, dynamic> favData = favoriteResponse.body == 'null'
@@ -73,7 +73,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await post(
-      Uri.parse('$_baseUrl.json?auth=$_token'),
+      Uri.parse('${DataUrls.DATABASE_PRODUCTS_URL}.json?auth=$_token'),
       body: jsonEncode(
         {
           "name": product.name,
@@ -99,7 +99,8 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       await patch(
-        Uri.parse('$_baseUrl/${product.id}.json?auth=$_token'),
+        Uri.parse(
+            '${DataUrls.DATABASE_PRODUCTS_URL}/${product.id}.json?auth=$_token'),
         body: jsonEncode(
           {
             "name": product.name,
@@ -119,7 +120,8 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       await delete(
-        Uri.parse('$_baseUrl/${product.id}.json?auth=$_token'),
+        Uri.parse(
+            '${DataUrls.DATABASE_PRODUCTS_URL}/${product.id}.json?auth=$_token'),
       );
       _items.removeWhere((p) => p.id == product.id);
       notifyListeners();
